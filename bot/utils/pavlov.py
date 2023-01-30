@@ -32,9 +32,33 @@ async def check_perm_admin(
         _servers.append(servers.get(server_name))
     elif global_check:
         _servers = servers.get_servers().values()
+    guild_roles = await ctx.guild.fetch_roles()
     for server in _servers:
+        logging.info("Checking members of every admin role...")
+        for role in server.get("admin_roles", []):
+            logging.info(f"Checking {role}...")
+            roleObj = False
+            for grole in guild_roles:
+                logging.info(f"Checking if {grole.id} == {role}")
+                if grole.id == role:
+                    logging.info("THE ROLE TO CHECK HAS BEEN FOUND IN THE CURRENT GUILD'S ROLES.")
+                    roleObj = grole
+            logging.info(roleObj)
+            if roleObj:
+                logging.info(f"{role} ({roleObj}) exists...")
+                logging.info(roleObj.members)
+                async for member in ctx.guild.fetch_members():
+                    if roleObj in member.roles:
+                        logging.info(f"Checking if {member} == {ctx.author.id}...")
+                        if ctx.author.id == member.id:
+                            logging.info(f"{ctx.author.id} was found to be a member of role {role}!")
+                            return True
+        logging.info("Checking if user is present in the admin role array...")
         if ctx.author.id in server.get("admins", []):
+            logging.info(f"User {ctx.author.id} found in admin array!")
             return True
+        else:
+            logging.info(f"User {ctx.author.id} not found in admin array...")
     if not sub_check:
         user_action_log(
             ctx,

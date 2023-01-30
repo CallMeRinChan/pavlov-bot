@@ -31,11 +31,17 @@ class PavlovAdmin(commands.Cog):
         logging.info(f"{type(self).__name__} Cog ready.")
 
     @commands.command()
-    async def menu(self, ctx):
+    async def menu(
+            self,
+            ctx,
+            server_name: str = config.default_server,
+        ):
         """`{prefix}menu`  - *Creates a button driven admin menu*
         **Description**: Creates a button driven admin menu.
         **Requires**: Admin permissions for the server
         """
+        if not await check_perm_admin(ctx, server_name):
+            return
         async def actions(interact):
             await message.edit(content="")
             server_name = interact.values[0]
