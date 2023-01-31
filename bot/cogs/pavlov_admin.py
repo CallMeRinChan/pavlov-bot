@@ -14,7 +14,7 @@ from bot.utils.interactions import (
     SpawnListTypes,
     SpawnExceptionListTooLong,
 )
-from bot.utils.pavlov import check_perm_admin, exec_server_command
+from bot.utils.pavlov import check_perm_admin, check_perm_moderator, exec_server_command
 from bot.utils.players import (
     exec_command_all_players,
     exec_command_all_players_on_team,
@@ -40,7 +40,7 @@ class PavlovAdmin(commands.Cog):
         **Description**: Creates a button driven admin menu.
         **Requires**: Admin permissions for the server
         """
-        if not await check_perm_admin(ctx, server_name):
+        if not await check_perm_moderator(ctx, server_name):
             return
         async def actions(interact):
             await message.edit(content="")

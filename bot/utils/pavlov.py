@@ -9,7 +9,6 @@ from bot.utils import servers, user_action_log
 
 RCON_TIMEOUT = 60
 
-
 MODERATOR_ROLE = "Mod-{}"
 CAPTAIN_ROLE = "Captain-{}"
 
@@ -111,6 +110,9 @@ async def check_perm_moderator(
 ):
     if await check_perm_admin(ctx, server_name, sub_check=True, global_check=global_check):
         return True
+    inRoleArray = await check_role_perms(ctx, "mod_roles", server)
+    if inRoleArray:
+        return True
     if not check_has_any_role(ctx, SUPER_MODERATOR, MODERATOR_ROLE, server_name, global_check):
         if not sub_check:
             user_action_log(
@@ -132,6 +134,9 @@ async def check_perm_moderator(
 async def check_perm_captain(ctx, server_name: str = None, global_check: bool = False):
     if await check_perm_moderator(ctx, server_name, sub_check=True, global_check=global_check):
         return True
+    inRoleArray = await check_role_perms(ctx, "trialmod_roles", server)
+    if inRoleArray:
+        return True		
     if not check_has_any_role(ctx, SUPER_CAPTAIN, CAPTAIN_ROLE, server_name, global_check):
         user_action_log(
             ctx,
