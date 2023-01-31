@@ -1,0 +1,28 @@
+!menu > admin
+!giveitem > admin
+!givevechicle > admin
+!givecash > admin
+!giveteamcash > admin
+!setplayerskin > admin
+!custom > admin (these are custom commands, so these will either stay admin only or be removed entirely)
+!repeat > admin
+!ban > mod
+!kill > mod
+!unban > mod
+!slap > mod
+!tttsetkarma > mod (idk why this is here, can be removed upon request)
+!tttflushkarma > mod (same)
+!tttendround > mod (same 2: electric boogaloo)
+!tttpausetimer > mod (same but running out of jokes)
+!tttalwaysenableskinmenu > mod (it's not even funny anymore)
+!gamesetup > trialmod (idk what this does ngl)
+!switchmap > trialmod (might remove, will most likely only result in fuckery)
+!resetsnd > trialmod (only usable if theres spawnkilling in military)
+!switchteam > trialmod (useless)
+!rotatemap > trialmod
+!matchsetup > trialmod ("sets up an SND match with teams")
+!flush > trialmod
+!setpin > trialmod
+!nametags > trialmod
+!kick > trialmod
+

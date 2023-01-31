@@ -462,30 +462,6 @@ class PavlovAdmin(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    async def nametags(self, ctx, boolean, server_name: str = config.default_server):
-        """`{prefix}nametags enable/disable/true/false server_name`
-        **Description**: Enables/disables nametags.
-        **Requires**: Admin permissions for the server
-        **Example**: `{prefix}nametags enable servername`
-        """
-        if boolean.casefold() == "enable":
-            boolean = "true"
-        elif boolean.casefold() == "disable":
-            boolean = "false"
-        if not await check_perm_admin(ctx, server_name):
-            return
-        data, _ = await exec_server_command(ctx, server_name, f"ShowNameTags {boolean}")
-        if not data:
-            data = "No response"
-        if ctx.batch_exec:
-            return data
-        if data.get("NametagsEnabled"):
-            embed = discord.Embed(title=f"**Nametags enabled!** \n")
-        else:
-            embed = discord.Embed(title=f"**Nametags disabled!** \n")
-        await ctx.send(embed=embed)
-
-    @commands.command()
     async def repeat(self, ctx, cmdr: str, aot: str):
         """`{prefix}repeat "<command with args>" amount_of_times server_name`
         **Description**: Repeats a complete pavlov-bot command multiple times.

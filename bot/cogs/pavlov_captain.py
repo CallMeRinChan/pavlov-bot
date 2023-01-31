@@ -461,5 +461,61 @@ class PavlovCaptain(commands.Cog):
                 embed = discord.Embed(title=f"Pin {pin} successfully set")
         await ctx.send(embed=embed)
 
+    @commands.command()
+    async def nametags(self, ctx, boolean, server_name: str = config.default_server):
+        """`{prefix}nametags enable/disable/true/false server_name`
+        **Description**: Enables/disables nametags.
+        **Requires**: Captain permissions for the server
+        **Example**: `{prefix}nametags enable servername`
+        """
+        if boolean.casefold() == "enable":
+            boolean = "true"
+        elif boolean.casefold() == "disable":
+            boolean = "false"
+        if not await check_perm_captain(ctx, server_name):
+            return
+        data, _ = await exec_server_command(ctx, server_name, f"ShowNameTags {boolean}")
+        if not data:
+            data = "No response"
+        if ctx.batch_exec:
+            return data
+        if data.get("NametagsEnabled"):
+            embed = discord.Embed(title=f"**Nametags enabled!** \n")
+        else:
+            embed = discord.Embed(title=f"**Nametags disabled!** \n")
+        await ctx.send(embed=embed)
+
+    @commands.command()
+    async def kick(
+        self,
+        ctx,
+        player_arg: str,
+        server_name: str = config.default_server,
+        __interaction: discord_components.Interaction = None,
+    ):
+        """`{prefix}kick <player_id> <server_name>`
+        **Description**: Kicks a player from the specified server.
+        **Requires**: Moderator permissions or higher for the server
+        **Example**: `{prefix}kick 89374583439127 servername`
+        """
+        if not await check_perm_moderator(ctx, server_name):
+            return
+        if ctx.interaction_exec:
+            player_arg, __interaction = await spawn_player_select(ctx, server_name, __interaction)
+            if player_arg == "NoPlayers":
+                embed = discord.Embed(title=f"**No players on `{server_name}`**")
+                await __interaction.send(embed=embed)
+                return
+            data, _ = await exec_server_command(ctx, server_name, f"Kick {player_arg}")
+        else:
+            player = SteamPlayer.convert(player_arg)
+            data, _ = await exec_server_command(ctx, server_name, f"Kick {player.unique_id}")
+        embed = discord.Embed(title=f"**Kick {player_arg} ** \n")
+        embed = await parse_player_command_results(ctx, data, embed, server_name)
+        if ctx.interaction_exec:
+            await __interaction.send(embed=embed)
+            return
+        await ctx.send(embed=embed)
+
 def setup(bot):
     bot.add_cog(PavlovCaptain(bot))
