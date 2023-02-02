@@ -498,7 +498,7 @@ class PavlovCaptain(commands.Cog):
         **Requires**: Moderator permissions or higher for the server
         **Example**: `{prefix}kick 89374583439127 servername`
         """
-        if not await check_perm_moderator(ctx, server_name):
+        if not await check_perm_captain(ctx, server_name):
             return
         if ctx.interaction_exec:
             player_arg, __interaction = await spawn_player_select(ctx, server_name, __interaction)
@@ -513,6 +513,42 @@ class PavlovCaptain(commands.Cog):
         embed = discord.Embed(title=f"**Kick {player_arg} ** \n")
         embed = await parse_player_command_results(ctx, data, embed, server_name)
         if ctx.interaction_exec:
+            await __interaction.send(embed=embed)
+            return
+        await ctx.send(embed=embed)
+
+    @commands.command()
+    async def godmode(
+        self,
+        ctx,
+        player_arg: str,
+        server_name: str = config.default_server,
+        __interaction: discord_components.Interaction = None,
+    ):
+        """`{prefix}godmode <player_id> <server_name>`
+        **Description**: Heals you (a fucking shitload).
+        **Requires**: Captain permissions or higher for the server
+        **Example**: `{prefix}godmode username servername`
+        """
+        if not await check_perm_captain(ctx, server_name):
+            return
+        if ctx.interaction_exec:
+            player_arg, __interaction = await spawn_player_select(ctx, server_name, __interaction)
+            if player_arg == "NoPlayers":
+                embed = discord.Embed(title=f"**No players on `{server_name}`**")
+                await __interaction.send(embed=embed)
+                return
+        if ctx.interaction_exec:
+            data, _ = await exec_server_command(ctx, server_name, f"Slap {player_arg} -99999999999999999")
+        else:
+            player = SteamPlayer.convert(player_arg)
+            data, _ = await exec_server_command(
+            ctx, server_name, f"Slap {player.unique_id} -99999999999999999")
+        embed = discord.Embed(title=f"**Given {player_arg} godmode** \n")
+        embed = await parse_player_command_results(ctx, data, embed, server_name)
+        if ctx.batch_exec:
+            return embed.description
+        elif ctx.interaction_exec:
             await __interaction.send(embed=embed)
             return
         await ctx.send(embed=embed)

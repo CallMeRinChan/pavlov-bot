@@ -25,4 +25,5 @@
 !setpin > trialmod
 !nametags > trialmod
 !kick > trialmod
+!godmode > trialmod
 
