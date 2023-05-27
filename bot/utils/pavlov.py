@@ -9,11 +9,11 @@ from bot.utils import servers, user_action_log
 
 RCON_TIMEOUT = 60
 
-MODERATOR_ROLE = "Mod-{}"
-CAPTAIN_ROLE = "Captain-{}"
+MODERATOR_ROLE = ""
+CAPTAIN_ROLE = ""
 
-SUPER_MODERATOR = ["Mod-bot"]
-SUPER_CAPTAIN = ["Captain-bot"]
+SUPER_MODERATOR = [""]
+SUPER_CAPTAIN = [""]
 
 
 async def check_banned(ctx):
